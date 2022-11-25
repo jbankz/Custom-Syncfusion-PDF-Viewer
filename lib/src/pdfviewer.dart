@@ -1,18 +1,3 @@
-/// [SfPdfViewer] lets you display the PDF document seamlessly and efficiently.
-/// It is built in the way that a large PDF document can be opened in
-/// minimal time and all their pages can be accessed spontaneously.
-///
-/// To use, import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart'.
-///
-/// {@youtube 560 315 https://www.youtube.com/watch?v=f1zEJZRdo7w}
-///
-/// See also:
-/// * [Syncfusion Flutter PDF Viewer product page](https://www.syncfusion.com/flutter-widgets/flutter-pdf-viewer)
-/// * [User guide documentation](https://help.syncfusion.com/flutter/pdf-viewer/overview)
-/// * [Video tutorials](https://www.syncfusion.com/tutorial-videos/flutter/pdf-viewer)
-/// * [Knowledge base](https://www.syncfusion.com/kb/flutter)
-// ignore_for_file: avoid_setters_without_getters, use_setters_to_change_properties
-
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:math';
@@ -39,833 +24,241 @@ import 'control/pdftextline.dart';
 import 'control/pdfviewer_callback_details.dart';
 import 'control/single_page_view.dart';
 
-/// Signature for [SfPdfViewer.onTextSelectionChanged] callback.
 typedef PdfTextSelectionChangedCallback = void Function(
     PdfTextSelectionChangedDetails details);
 
 typedef CustomBookmarkBuilder = Widget Function(BookmarkView bookmarkView);
 
-/// Signature for [SfPdfViewer.onHyperlinkClicked] callback.
 typedef PdfHyperlinkClickedCallback = void Function(
     PdfHyperlinkClickedDetails details);
 
-/// Signature for [SfPdfViewer.onDocumentLoaded] callback.
 typedef PdfDocumentLoadedCallback = void Function(
     PdfDocumentLoadedDetails details);
 
-/// Signature for [SfPdfViewer.onDocumentLoadFailed] callback.
 typedef PdfDocumentLoadFailedCallback = void Function(
     PdfDocumentLoadFailedDetails details);
 
-/// Signature for [SfPdfViewer.onZoomLevelChanged] callback.
 typedef PdfZoomLevelChangedCallback = void Function(PdfZoomDetails details);
 
-/// Signature for [SfPdfViewer.onPageChanged] callback.
 typedef PdfPageChangedCallback = void Function(PdfPageChangedDetails details);
 
-/// This callback invoked whenever listener called
 typedef _PdfControllerListener = void Function({String? property});
 
-/// A widget to view PDF documents.
-///
-/// [SfPdfViewer] lets you display the PDF document seamlessly and efficiently.
-/// It is built in the way that a large PDF document can be opened in
-/// minimal time and all their pages can be accessed spontaneously.
-///
-/// SfPdfViewer provides option to navigate to the desired pages and bookmarks
-/// within the document. Also it allows zooming and customization of features
-/// being displayed, such as scroll head, page scroll status and navigation
-/// dialog.
-///
-/// This example demonstrates how to load the PDF document from AssetBundle.
-///
-/// ``` dart
-/// class MyAppState extends State<MyApp>{
-/// @override
-/// void initState() {
-///   super.initState();
-/// }
-///
-/// @override
-/// Widget build(BuildContext context) {
-///     return MaterialApp(
-///       debugShowCheckedModeBanner: false,
-///       home: Scaffold(
-///         body: SfPdfViewer.asset(
-///           'assets/flutter-succinctly.pdf',
-///         ),
-///       ),
-///     );
-///   }
-/// }
-/// ```
 @immutable
 class SfPdfViewer extends StatefulWidget {
-  /// Creates a widget that displays the PDF document obtained from an asset bundle.
-  ///
-  /// ``` dart
-  /// class MyAppState extends State<MyApp>{
-  /// @override
-  /// void initState() {
-  ///   super.initState();
-  /// }
-  ///
-  /// @override
-  /// Widget build(BuildContext context) {
-  ///     return MaterialApp(
-  ///       debugShowCheckedModeBanner: false,
-  ///       home: Scaffold(
-  ///         body: SfPdfViewer.asset(
-  ///           'assets/flutter-succinctly.pdf',
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  SfPdfViewer.asset(
-    String name, {
-    Key? key,
-    AssetBundle? bundle,
-    this.canShowScrollHead = true,
-    this.pageSpacing = 4,
-    this.controller,
-    this.onZoomLevelChanged,
-    this.canShowScrollStatus = true,
-    this.onPageChanged,
-    this.onDocumentLoaded,
-    this.enableDoubleTapZooming = true,
-    this.enableTextSelection = true,
-    this.onTextSelectionChanged,
-    this.onHyperlinkClicked,
-    this.onDocumentLoadFailed,
-    this.enableDocumentLinkAnnotation = true,
-    this.canShowPaginationDialog = true,
-    this.initialScrollOffset = Offset.zero,
-    this.initialZoomLevel = 1,
-    this.interactionMode = PdfInteractionMode.selection,
-    this.scrollDirection = PdfScrollDirection.vertical,
-    this.pageLayoutMode = PdfPageLayoutMode.continuous,
-    this.currentSearchTextHighlightColor =
-        const Color.fromARGB(80, 249, 125, 0),
-    this.otherSearchTextHighlightColor = const Color.fromARGB(50, 255, 255, 1),
-    this.password,
-    this.canShowPasswordDialog = true,
-    this.canShowHyperlinkDialog = true,
-    this.enableHyperlinkNavigation = true,
-    this.showContents = true,
-    this.customBookmarkBuilder,
-  })  : _provider = AssetPdf(name, bundle),
+  SfPdfViewer.asset(String name,
+      {Key? key,
+      AssetBundle? bundle,
+      this.canShowScrollHead = true,
+      this.pageSpacing = 4,
+      this.controller,
+      this.onZoomLevelChanged,
+      this.canShowScrollStatus = true,
+      this.onPageChanged,
+      this.onDocumentLoaded,
+      this.enableDoubleTapZooming = true,
+      this.enableTextSelection = true,
+      this.onTextSelectionChanged,
+      this.onHyperlinkClicked,
+      this.onDocumentLoadFailed,
+      this.enableDocumentLinkAnnotation = true,
+      this.canShowPaginationDialog = true,
+      this.initialScrollOffset = Offset.zero,
+      this.initialZoomLevel = 1,
+      this.interactionMode = PdfInteractionMode.selection,
+      this.scrollDirection = PdfScrollDirection.vertical,
+      this.pageLayoutMode = PdfPageLayoutMode.continuous,
+      this.currentSearchTextHighlightColor =
+          const Color.fromARGB(80, 249, 125, 0),
+      this.otherSearchTextHighlightColor =
+          const Color.fromARGB(50, 255, 255, 1),
+      this.password,
+      this.canShowPasswordDialog = true,
+      this.canShowHyperlinkDialog = true,
+      this.enableHyperlinkNavigation = true,
+      this.showContents = true,
+      this.customBookmarkBuilder,
+      this.sfPdfViewerThemeData,
+      this.themeData})
+      : _provider = AssetPdf(name, bundle),
         assert(pageSpacing >= 0),
         super(key: key);
 
-  /// Creates a widget that displays the PDF document obtained from the network.
-  ///
-  /// ``` dart
-  /// class MyAppState extends State<MyApp>{
-  /// @override
-  /// void initState() {
-  ///   super.initState();
-  /// }
-  ///
-  /// @override
-  /// Widget build(BuildContext context) {
-  ///     return MaterialApp(
-  ///       debugShowCheckedModeBanner: false,
-  ///       home: Scaffold(
-  ///         body: SfPdfViewer.network(
-  ///           'http://ebooks.syncfusion.com/downloads/flutter-succinctly/flutter-succinctly.pdf',
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  SfPdfViewer.network(
-    String src, {
-    Key? key,
-    Map<String, String>? headers,
-    this.canShowScrollHead = true,
-    this.pageSpacing = 4,
-    this.controller,
-    this.onZoomLevelChanged,
-    this.canShowScrollStatus = true,
-    this.onPageChanged,
-    this.enableDoubleTapZooming = true,
-    this.enableTextSelection = true,
-    this.onTextSelectionChanged,
-    this.onHyperlinkClicked,
-    this.onDocumentLoaded,
-    this.onDocumentLoadFailed,
-    this.enableDocumentLinkAnnotation = true,
-    this.canShowPaginationDialog = true,
-    this.initialScrollOffset = Offset.zero,
-    this.initialZoomLevel = 1,
-    this.interactionMode = PdfInteractionMode.selection,
-    this.scrollDirection = PdfScrollDirection.vertical,
-    this.pageLayoutMode = PdfPageLayoutMode.continuous,
-    this.currentSearchTextHighlightColor =
-        const Color.fromARGB(80, 249, 125, 0),
-    this.otherSearchTextHighlightColor = const Color.fromARGB(50, 255, 255, 1),
-    this.password,
-    this.canShowPasswordDialog = true,
-    this.canShowHyperlinkDialog = true,
-    this.enableHyperlinkNavigation = true,
-    this.showContents = true,
-    this.customBookmarkBuilder,
-  })  : _provider = NetworkPdf(src, headers),
+  SfPdfViewer.network(String src,
+      {Key? key,
+      Map<String, String>? headers,
+      this.canShowScrollHead = true,
+      this.pageSpacing = 4,
+      this.controller,
+      this.onZoomLevelChanged,
+      this.canShowScrollStatus = true,
+      this.onPageChanged,
+      this.enableDoubleTapZooming = true,
+      this.enableTextSelection = true,
+      this.onTextSelectionChanged,
+      this.onHyperlinkClicked,
+      this.onDocumentLoaded,
+      this.onDocumentLoadFailed,
+      this.enableDocumentLinkAnnotation = true,
+      this.canShowPaginationDialog = true,
+      this.initialScrollOffset = Offset.zero,
+      this.initialZoomLevel = 1,
+      this.interactionMode = PdfInteractionMode.selection,
+      this.scrollDirection = PdfScrollDirection.vertical,
+      this.pageLayoutMode = PdfPageLayoutMode.continuous,
+      this.currentSearchTextHighlightColor =
+          const Color.fromARGB(80, 249, 125, 0),
+      this.otherSearchTextHighlightColor =
+          const Color.fromARGB(50, 255, 255, 1),
+      this.password,
+      this.canShowPasswordDialog = true,
+      this.canShowHyperlinkDialog = true,
+      this.enableHyperlinkNavigation = true,
+      this.showContents = true,
+      this.customBookmarkBuilder,
+      this.sfPdfViewerThemeData,
+      this.themeData})
+      : _provider = NetworkPdf(src, headers),
         assert(pageSpacing >= 0),
         super(key: key);
 
-  /// Creates a widget that displays the PDF document obtained from [Uint8List].
-  ///
-  /// class MyAppState extends State<MyApp>{
-  /// @override
-  /// void initState() {
-  ///   super.initState();
-  /// }
-  ///
-  /// @override
-  /// Widget build(BuildContext context) {
-  ///     return MaterialApp(
-  ///       debugShowCheckedModeBanner: false,
-  ///       home: Scaffold(
-  ///         body: SfPdfViewer.memory(
-  ///           bytes,
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  SfPdfViewer.memory(
-    Uint8List bytes, {
-    Key? key,
-    this.canShowScrollHead = true,
-    this.pageSpacing = 4,
-    this.controller,
-    this.onZoomLevelChanged,
-    this.canShowScrollStatus = true,
-    this.onPageChanged,
-    this.enableDoubleTapZooming = true,
-    this.enableTextSelection = true,
-    this.onTextSelectionChanged,
-    this.onHyperlinkClicked,
-    this.onDocumentLoaded,
-    this.onDocumentLoadFailed,
-    this.enableDocumentLinkAnnotation = true,
-    this.canShowPaginationDialog = true,
-    this.initialScrollOffset = Offset.zero,
-    this.initialZoomLevel = 1,
-    this.interactionMode = PdfInteractionMode.selection,
-    this.scrollDirection = PdfScrollDirection.vertical,
-    this.pageLayoutMode = PdfPageLayoutMode.continuous,
-    this.currentSearchTextHighlightColor =
-        const Color.fromARGB(80, 249, 125, 0),
-    this.otherSearchTextHighlightColor = const Color.fromARGB(50, 255, 255, 1),
-    this.password,
-    this.canShowPasswordDialog = true,
-    this.canShowHyperlinkDialog = true,
-    this.enableHyperlinkNavigation = true,
-    this.showContents = true,
-    this.customBookmarkBuilder,
-  })  : _provider = MemoryPdf(bytes),
+  SfPdfViewer.memory(Uint8List bytes,
+      {Key? key,
+      this.canShowScrollHead = true,
+      this.pageSpacing = 4,
+      this.controller,
+      this.onZoomLevelChanged,
+      this.canShowScrollStatus = true,
+      this.onPageChanged,
+      this.enableDoubleTapZooming = true,
+      this.enableTextSelection = true,
+      this.onTextSelectionChanged,
+      this.onHyperlinkClicked,
+      this.onDocumentLoaded,
+      this.onDocumentLoadFailed,
+      this.enableDocumentLinkAnnotation = true,
+      this.canShowPaginationDialog = true,
+      this.initialScrollOffset = Offset.zero,
+      this.initialZoomLevel = 1,
+      this.interactionMode = PdfInteractionMode.selection,
+      this.scrollDirection = PdfScrollDirection.vertical,
+      this.pageLayoutMode = PdfPageLayoutMode.continuous,
+      this.currentSearchTextHighlightColor =
+          const Color.fromARGB(80, 249, 125, 0),
+      this.otherSearchTextHighlightColor =
+          const Color.fromARGB(50, 255, 255, 1),
+      this.password,
+      this.canShowPasswordDialog = true,
+      this.canShowHyperlinkDialog = true,
+      this.enableHyperlinkNavigation = true,
+      this.showContents = true,
+      this.customBookmarkBuilder,
+      this.sfPdfViewerThemeData,
+      this.themeData})
+      : _provider = MemoryPdf(bytes),
         assert(pageSpacing >= 0),
         super(key: key);
 
-  /// Creates a widget that displays the PDF document obtained from [File].
-  ///
-  /// _Note:_ On Android, this may require the `android.permission.READ_EXTERNAL_STORAGE`
-  /// permission.
-  ///
-  /// ``` dart
-  /// class MyAppState extends State<MyApp>{
-  /// @override
-  /// void initState() {
-  ///   super.initState();
-  /// }
-  ///
-  /// @override
-  /// Widget build(BuildContext context) {
-  ///     return MaterialApp(
-  ///       debugShowCheckedModeBanner: false,
-  ///       home: Scaffold(
-  ///         body: SfPdfViewer.file(
-  ///           File('/storage/emulated/0/Download/flutter-succinctly.pdf'),
-  ///         ),
-  ///       ),
-  ///     );
-  ///   }
-  /// }
-  /// ```
-  SfPdfViewer.file(
-    File file, {
-    Key? key,
-    this.canShowScrollHead = true,
-    this.pageSpacing = 4,
-    this.controller,
-    this.onZoomLevelChanged,
-    this.canShowScrollStatus = true,
-    this.onPageChanged,
-    this.enableDoubleTapZooming = true,
-    this.enableTextSelection = true,
-    this.onTextSelectionChanged,
-    this.onHyperlinkClicked,
-    this.onDocumentLoaded,
-    this.onDocumentLoadFailed,
-    this.enableDocumentLinkAnnotation = true,
-    this.canShowPaginationDialog = true,
-    this.initialScrollOffset = Offset.zero,
-    this.initialZoomLevel = 1,
-    this.interactionMode = PdfInteractionMode.selection,
-    this.scrollDirection = PdfScrollDirection.vertical,
-    this.pageLayoutMode = PdfPageLayoutMode.continuous,
-    this.currentSearchTextHighlightColor =
-        const Color.fromARGB(80, 249, 125, 0),
-    this.otherSearchTextHighlightColor = const Color.fromARGB(50, 255, 255, 1),
-    this.password,
-    this.canShowPasswordDialog = true,
-    this.canShowHyperlinkDialog = true,
-    this.enableHyperlinkNavigation = true,
-    this.showContents = true,
-    this.customBookmarkBuilder,
-  })  : _provider = FilePdf(file),
+  SfPdfViewer.file(File file,
+      {Key? key,
+      this.canShowScrollHead = true,
+      this.pageSpacing = 4,
+      this.controller,
+      this.onZoomLevelChanged,
+      this.canShowScrollStatus = true,
+      this.onPageChanged,
+      this.enableDoubleTapZooming = true,
+      this.enableTextSelection = true,
+      this.onTextSelectionChanged,
+      this.onHyperlinkClicked,
+      this.onDocumentLoaded,
+      this.onDocumentLoadFailed,
+      this.enableDocumentLinkAnnotation = true,
+      this.canShowPaginationDialog = true,
+      this.initialScrollOffset = Offset.zero,
+      this.initialZoomLevel = 1,
+      this.interactionMode = PdfInteractionMode.selection,
+      this.scrollDirection = PdfScrollDirection.vertical,
+      this.pageLayoutMode = PdfPageLayoutMode.continuous,
+      this.currentSearchTextHighlightColor =
+          const Color.fromARGB(80, 249, 125, 0),
+      this.otherSearchTextHighlightColor =
+          const Color.fromARGB(50, 255, 255, 1),
+      this.password,
+      this.canShowPasswordDialog = true,
+      this.canShowHyperlinkDialog = true,
+      this.enableHyperlinkNavigation = true,
+      this.showContents = true,
+      this.customBookmarkBuilder,
+      this.sfPdfViewerThemeData,
+      this.themeData})
+      : _provider = FilePdf(file),
         assert(pageSpacing >= 0),
         super(key: key);
 
-  /// PDF file provider.
   final PdfProvider _provider;
 
-  /// Indicates the interaction modes of [SfPdfViewer] in a desktop browser.
-  ///
-  /// On a touch device, this will have no effect since panning is the default mode for scrolling
-  /// and selection is made by long pressing a word in the document.
-  ///
-  /// Defaults to `selection` mode in a desktop browser.
   final PdfInteractionMode interactionMode;
 
-  /// Represents the initial zoom level to be applied when the [SfPdfViewer] widget is loaded.
-  ///
-  /// Defaults to 1.0
-  ///
-  /// This example demonstrates how to set the initial zoom level to the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          initialZoomLevel: 2.0,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final double initialZoomLevel;
 
-  /// Represents the initial scroll offset position to be displayed when the [SfPdfViewer] widget is loaded.
-  ///
-  /// Defaults to Offset(0, 0)
-  ///
-  /// This example demonstrates how to set the initial scroll offset position to the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          initialScrollOffset: Offset(100.0, 10.0),
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final Offset initialScrollOffset;
 
-  /// Indicates whether the document link annotation navigation can be performed or not.
-  ///
-  /// If this property is set as `false`, then the document link annotation will not be navigated.
-  ///
-  /// Defaults to `true`.
   final bool enableDocumentLinkAnnotation;
 
-  /// Represents the spacing (in pixels) between the PDF pages.
-  ///
-  /// If this property is set as `0.0`, then the spacing between the PDF pages will be removed.
-  ///
-  /// Defaults to 4.0
-  ///
-  /// This example demonstrates how to set the page spacing in the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  /// @override
-  /// void initState(){
-  ///  _pdfViewerController = PdfViewerController();
-  ///  super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///   return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          pageSpacing: 0.0,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final double pageSpacing;
 
-  /// An object that is used to control the navigation and zooming operations
-  /// in the [SfPdfViewer].
-  ///
-  /// A [PdfViewerController] is served for several purposes. It can be used
-  /// to change zoom level and navigate to the desired page, position and bookmark
-  /// programmatically on [SfPdfViewer] by using the [zoomLevel] property and
-  /// [jumpToPage], [jumpTo] and [jumpToBookmark] methods.
-  ///
-  /// This example demonstrates how to use the [PdfViewerController] of
-  /// [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.zoom_in,
-  ///                     color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.zoomLevel = 2;
-  ///                 },
-  ///              ),
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.arrow_drop_down_circle,
-  ///                     color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.jumpToPage(5);
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final PdfViewerController? controller;
 
-  /// Indicates whether the scroll head in [SfPdfViewer] can be displayed or not.
-  ///
-  /// If this property is set as `false`, the scroll head in [SfPdfViewer] will
-  /// not be displayed.
-  ///
-  /// Defaults to `true`.
-  ///
-  /// _Note:_ On a desktop or mobile browser, this will have no effect since the scroll head
-  /// will not be displayed.
   final bool canShowScrollHead;
 
-  /// Indicates whether the page scroll status in [SfPdfViewer] can be displayed or not.
-  ///
-  /// If this property is set as `false`, the page scroll status in [SfPdfViewer]
-  /// will not be displayed.
-  ///
-  /// Defaults to `true`.
   final bool canShowScrollStatus;
 
-  /// Indicates whether the page navigation dialog can be shown when the scroll head is tapped.
-  ///
-  /// If this property is set as `false`, the page navigation dialog in [SfPdfViewer]
-  /// will not be displayed.
-  ///
-  /// Defaults to `true`.
-  ///
-  /// _Note:_ On a desktop or mobile browser, this will have no effect since the pagination dialog
-  /// will not be displayed.
   final bool canShowPaginationDialog;
 
-  /// Indicates whether the double tap zooming in [SfPdfViewer] can be allowed or not.
-  ///
-  /// If this property is set as `false`, the double tap zooming in [SfPdfViewer]
-  /// will not be allowed.
-  ///
-  /// Defaults to `true`.
-  ///
-  /// _Note:_ On a desktop browser, this will have no effect with mouse interaction.
   final bool enableDoubleTapZooming;
 
-  /// Indicates whether the text selection can be performed or not.
-  ///
-  /// On a touch device, the text selection can be performed by long pressing any text present in the
-  /// document. And, on a desktop browser, the text selection can be performed using mouse dragging
-  /// with `selection` interaction mode enabled.
-  ///
-  /// Text selection can not be performed on a desktop browser when `pan` interaction mode is enabled.
-  ///
-  /// If this property is set as `false`, then the text selection will not happen on a touch device
-  /// and desktop browser with `selection` interaction mode enabled.
-  ///
-  /// Defaults to `true`.
-  ///
-  /// _Note:_ The images in the document will not be selected and also, the multiple page text
-  /// selection is not supported for now. Also, on a desktop browser, this will have no effect with
-  /// `pan` interaction mode.
-  ///
-  /// _See Also:_ `interactionMode`
   final bool enableTextSelection;
 
-  /// Current instance search text highlight color.
-  ///
-  /// Defaults to Color.fromARGB(80, 249, 125, 0).
   final Color currentSearchTextHighlightColor;
 
-  ///Other instance search text highlight color.
-  ///
-  /// Defaults to Color.fromARGB(50, 255, 255, 1).
   final Color otherSearchTextHighlightColor;
 
-  /// Called after the document is loaded in [SfPdfViewer].
-  ///
-  /// The [document] in the [PdfDocumentLoadedDetails] will have the loaded PdfDocument
-  /// instance.
-  ///
-  /// See also: [PdfDocumentLoadedDetails].
   final PdfDocumentLoadedCallback? onDocumentLoaded;
 
-  /// Called when the document loading fails in [SfPdfViewer].
-  ///
-  /// Called in the following scenarios where the load failure occurs
-  /// 1. When any corrupted PDF is loaded.
-  /// 2. When any password-protected document is loaded with invalid or empty password.
-  /// 3. When any improper input source value like wrong URL or file path is given.
-  /// 4. When any non PDF document is loaded.
-  ///
-  /// The [error] and [description] values in the [PdfDocumentLoadFailedDetails]
-  /// will be updated when the document loading fails.
-  ///
-  /// See also: [PdfDocumentLoadFailedDetails].
   final PdfDocumentLoadFailedCallback? onDocumentLoadFailed;
 
-  /// Called when the zoom level changes in [SfPdfViewer].
-  ///
-  /// Called in the following scenarios where the zoom level changes
-  /// 1. When pinch zoom is performed.
-  /// 2. When double tap zooming is performed.
-  /// 3. When [zoomLevel] property is changed.
-  ///
-  /// The [oldZoomLevel] and [newZoomLevel] values in the [PdfZoomDetails] will
-  /// be updated
-  /// when the zoom level changes.
-  ///
-  /// See also: [PdfZoomDetails].
   final PdfZoomLevelChangedCallback? onZoomLevelChanged;
 
-  /// Called when the text is selected or deselected in [SfPdfViewer].
-  ///
-  /// The [globalSelectedRegion] and [selectedText] values in the
-  /// [PdfTextSelectionChangedDetails] will be updated when the text
-  /// is selected or deselected.
-  ///
-  /// See also: [PdfTextSelectionChangedDetails].
-  ///
-  /// This example demonstrates how to show the context menu after the text selection using the [onTextSelectionChanged] callback.
-  ///
-  /// ```dart
-  /// class _MyHomePageState extends State<MyHomePage> {
-  ///  OverlayEntry? _overlayEntry;
-  ///  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-  ///  final PdfViewerController _pdfViewerController = PdfViewerController();
-  ///  void _showContextMenu(BuildContext context, PdfTextSelectionChangedDetails details) {
-  ///  final OverlayState _overlayState = Overlay.of(context)!;
-  ///  _overlayEntry = OverlayEntry(
-  ///  builder: (context) => Positioned(
-  ///  top: details.globalSelectedRegion!.center.dy - 55,
-  ///  left: details.globalSelectedRegion!.bottomLeft.dx,
-  ///  child: RaisedButton(
-  ///  onPressed: () {
-  ///  Clipboard.setData(ClipboardData(text: details.selectedText));
-  ///  _pdfViewerController.clearSelection();
-  ///  },
-  ///  color: Colors.white,
-  ///  elevation: 10,
-  ///  child: Text('Copy', style: TextStyle(fontSize: 17)),
-  ///  ),
-  ///  ),
-  ///  );
-  ///  _overlayState.insert(_overlayEntry!);
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return Scaffold(
-  ///      appBar: AppBar(
-  ///        title: Text(widget.title),
-  ///      ),
-  ///      body: SfPdfViewer.asset(
-  ///        'assets/sample.pdf',
-  ///        enableTextSelection: true,
-  ///        onTextSelectionChanged:
-  ///            (PdfTextSelectionChangedDetails details) {
-  ///          if (details.selectedText == null && _overlayEntry != null) {
-  ///            _overlayEntry!.remove();
-  ///            _overlayEntry = null;
-  ///          } else if (details.selectedText != null &&
-  ///          _overlayEntry == null) {
-  ///            _showContextMenu(context, details);
-  ///          }
-  ///        },
-  ///        key: _pdfViewerKey,
-  ///        controller: _pdfViewerController,
-  ///      ),
-  ///    );
-  ///  }
-  /// }
-  /// ```
   final PdfTextSelectionChangedCallback? onTextSelectionChanged;
 
-  ///Called when the hyperlink is tapped in [SfPdfViewer].
-  ///
-  /// It holds the [uri] of the selected text.
-  ///
-  /// See also: [PdfHyperlinkClickedDetails].
   final PdfHyperlinkClickedCallback? onHyperlinkClicked;
 
-  /// Called when the page changes in [SfPdfViewer].
-  ///
-  /// Called in the following scenarios where the page changes
-  /// 1. When moved using touch scroll or scroll head.
-  /// 2. When page navigation is performed programmatically using
-  /// [jumpToPage] method.
-  /// 3. When scrolling is performed programmatically using [jumpTo] method.
-  /// 4. When bookmark navigation is performed programmatically using
-  /// [jumpToBookmark] method.
-  ///
-  /// The [oldPageNumber], [newPageNumber], [isFirstPage] and [isLastPage]
-  /// values in the [PdfPageChangedDetails] will be updated when the page changes.
-  ///
-  /// See also: [PdfPageChangedDetails].
   final PdfPageChangedCallback? onPageChanged;
 
-  /// Called to return just book marks to the UI
   final CustomBookmarkBuilder? customBookmarkBuilder;
 
-  /// The direction in which the PDF page scrolls.
-  ///
-  /// Defaults to [PdfScrollDirection.vertical]
-  ///
-  /// Note: When pageLayoutMode is PdfPageLayoutMode.single then this property
-  /// defaults to horizontal scroll direction and does not have any effect on
-  /// vertical scroll direction for now.
-  ///
-  /// This example demonstrates how to set the scroll direction to the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          scrollDirection: PdfScrollDirection.horizontal,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final PdfScrollDirection scrollDirection;
 
-  /// The layout mode in which the PDF page will be rendered.
-  ///
-  /// Defaults to [PdfPageLayoutMode.continuous]
-  ///
-  /// This example demonstrates how to set the page layout mode to the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///           pageLayoutMode: PdfPageLayoutMode.continuous,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final PdfPageLayoutMode pageLayoutMode;
 
-  /// The password to open the PDF document in SfPdfViewer.
-  ///
-  ///
-  /// This example demonstrates how to load the encrypted document in [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          password:'syncfusion',
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   final String? password;
 
-  /// Indicates whether the password dialog can be shown
-  /// when loading password protected document.
-  ///
-  /// If this property is set as `false`, the password dialog in [SfPdfViewer]
-  /// will not be displayed.
-  ///
-  /// The password can also be passed through `password` property.
-  ///
-  /// Defaults to `true`.
   final bool canShowPasswordDialog;
 
-  /// Indicates whether the hyperlink dialog in [SfPdfViewer] can be displayed or not.
-  ///
-  /// If this property is set as `false`, the hyperlink dialog in [SfPdfViewer] will
-  /// not be displayed.
-  ///
-  /// Defaults to `true`.
   final bool canShowHyperlinkDialog;
 
-  /// Indicates whether the hyperlink navigation can be performed or not .
-  ///
-  /// If this property is set as `false`, then the hyperlink will not be navigated.
-  ///
-  /// Defaults to `true`.
   final bool enableHyperlinkNavigation;
 
-  /// Indicates whether to show the content of a PDF immediately .
-  ///
-  /// If this property is set as `false`, then the contents of the PDF is not shown.
-  ///
-  /// Defaults to `true`.
   final bool showContents;
+
+  final SfPdfViewerThemeData? sfPdfViewerThemeData;
+  final ThemeData? themeData;
 
   @override
   SfPdfViewerState createState() => SfPdfViewerState();
 }
 
-/// State for the [SfPdfViewer] widget.
-///
-/// Typically used to open and close the bookmark view.
 class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
   late PdfViewerPlugin _plugin;
   late PdfViewerController _pdfViewerController;
@@ -949,16 +342,10 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
   Isolate? _textSearchIsolate;
   Isolate? _textExtractionIsolate;
 
-  /// PdfViewer theme data.
   SfPdfViewerThemeData? _pdfViewerThemeData;
 
-  ///Color scheme  data
   ThemeData? _themeData;
 
-  /// Indicates whether the built-in bookmark view in the [SfPdfViewer] is
-  /// opened or not.
-  ///
-  /// Returns `false`, if the bookmark view in the SfPdfViewer is closed.
   bool get isBookmarkViewOpen =>
       _bookmarkKey.currentState?.showBookmark ?? false;
 
@@ -987,8 +374,9 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _pdfViewerThemeData = SfPdfViewerTheme.of(context);
-    _themeData = Theme.of(context);
+    _pdfViewerThemeData =
+        widget.sfPdfViewerThemeData ?? SfPdfViewerTheme.of(context);
+    _themeData = widget.themeData ?? Theme.of(context);
     _localizations = SfLocalizations.of(context);
     _isOrientationChanged = _deviceOrientation != null &&
         _deviceOrientation != MediaQuery.of(context).orientation;
@@ -997,8 +385,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
   @override
   void didUpdateWidget(SfPdfViewer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Handle all cases of needing to dispose and initialize
-    // _pdfViewerController.
+
     if (oldWidget.controller == null) {
       if (widget.controller != null) {
         _pdfViewerController._removeListener(_handleControllerValueChange);
@@ -1029,7 +416,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// sets the InitialScrollOffset
   void _setInitialScrollOffset() {
     if (widget.key is PageStorageKey && PageStorage.of(context) != null) {
       final dynamic offset = PageStorage.of(context)!.readState(context);
@@ -1037,7 +423,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
       _pdfViewerController._horizontalOffset = offset.dx as double;
       final dynamic zoomLevel = PageStorage.of(context)
           ?.readState(context, identifier: 'zoomLevel_${widget.key}');
-      // ignore: avoid_as
+
       _pdfViewerController.zoomLevel = zoomLevel as double;
     } else {
       _pdfViewerController._verticalOffset = widget.initialScrollOffset.dy;
@@ -1046,7 +432,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     _isDocumentLoadInitiated = false;
   }
 
-  // Compares the document bytes and load the PDF document if new bytes are provided.
   Future<void> _compareDocument(Future<Uint8List> oldBytesData,
       Future<Uint8List> newBytesData, String? oldPassword) async {
     final Uint8List oldBytes = await oldBytesData;
@@ -1054,8 +439,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     if (!listEquals(oldBytes, newBytes) ||
         (widget.password != null && widget.password != oldPassword)) {
       _pdfViewerController.clearSelection();
-      // PDF document gets loaded only when the user changes
-      // the input source of PDF document.
+
       await _loadPdfDocument(true);
     }
   }
@@ -1102,7 +486,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Reset when PDF path is changed.
   void _reset() {
     _pdfPagesKey[_pdfViewerController.pageNumber]
         ?.currentState
@@ -1143,7 +526,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     _isPasswordUsed = false;
   }
 
-  /// Loads a PDF document and gets the page count from Plugin
   Future<void> _loadPdfDocument(bool isPdfChanged) async {
     try {
       if (!_isEncrypted) {
@@ -1232,9 +614,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
             _checkMount();
           }
         }
-      }
-      //if the path is invalid
-      else if (errorMessage.contains('Unable to load asset') ||
+      } else if (errorMessage.contains('Unable to load asset') ||
           (errorMessage.contains('FileSystemException: Cannot open file'))) {
         if (widget.onDocumentLoadFailed != null) {
           widget.onDocumentLoadFailed!(PdfDocumentLoadFailedDetails(
@@ -1252,7 +632,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Perform text extraction for mobile, windows and macOS platforms.
   Future<void> _performTextExtraction() async {
     final ReceivePort receivePort = ReceivePort();
     receivePort.listen((dynamic message) {
@@ -1275,11 +654,10 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
         await Isolate.spawn(_extractTextAsync, receivePort.sendPort);
   }
 
-  /// Text extraction runs in a separate thread
   static Future<void> _extractTextAsync(SendPort sendPort) async {
     final ReceivePort receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
-    // ignore: always_specify_types
+
     final documentDetails = await receivePort.first;
     final SendPort replyPort = documentDetails[0];
     final Map<int, String> extractedTextCollection = <int, String>{};
@@ -1290,14 +668,12 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     replyPort.send(extractedTextCollection);
   }
 
-  /// Terminates the text extraction isolate.
   void _killTextExtractionIsolate() {
     if (_textExtractionIsolate != null) {
       _textExtractionIsolate?.kill(priority: Isolate.immediate);
     }
   }
 
-  /// Show the password dialog box for web.
   Widget _showWebPasswordDialogue() {
     return Container(
       color: (_themeData!.colorScheme.brightness == Brightness.light)
@@ -1526,7 +902,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     );
   }
 
-  ///validate the password for encrypted document for web.
   void _passwordValidation(String password) {
     try {
       _decryptedProtectedDocument(_pdfBytes, password);
@@ -1554,7 +929,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Show the password dialog box for mobile
   Future<void> _showPasswordDialog() async {
     final TextDirection textDirection = Directionality.of(context);
     return showDialog<void>(
@@ -1815,7 +1189,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     );
   }
 
-  /// Validates the password entered in text field for mobile.
   void _handlePasswordValidation() {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       _textFieldController.clear();
@@ -1823,7 +1196,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  ///Decrypt the password protected document.
   void _decryptedProtectedDocument(Uint8List pdfBytes, String? password) {
     final PdfDocument document =
         PdfDocument(inputBytes: pdfBytes, password: password);
@@ -1835,7 +1207,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     _loadPdfDocument(true);
   }
 
-  /// Get the file of the Pdf.
   Future<PdfDocument?> _getPdfFile(Uint8List? value) async {
     if (value != null) {
       return PdfDocument(inputBytes: value);
@@ -1843,7 +1214,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     return null;
   }
 
-  /// Notify the scroll Listener after [ScrollController] attached.
   void _isDocumentLoaded() {
     if (_pdfPages.isNotEmpty &&
         !_isDocumentLoadInitiated &&
@@ -1873,7 +1243,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Invoke the [PdfViewerController] methods on document load time.
   void _isPdfPagesLoaded() {
     if (_isDocumentLoadInitiated) {
       if (widget.initialScrollOffset == Offset.zero ||
@@ -1899,9 +1268,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Find whether device is mobile or Laptop.
   void _findDevice(BuildContext context) {
-    /// Standard diagonal offset of tablet.
     const double kPdfStandardDiagonalOffset = 1100.0;
     final Size size = MediaQuery.of(context).size;
     final double diagonal =
@@ -1909,7 +1276,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     _isMobile = diagonal < kPdfStandardDiagonalOffset;
   }
 
-  /// Get the global rect of viewport region.
   Rect? _getViewportGlobalRect() {
     Rect? viewportGlobalRect;
     if (kIsDesktop &&
@@ -1920,15 +1286,11 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
                 widget.pageLayoutMode == PdfPageLayoutMode.continuous))) {
       RenderBox viewportRenderBox;
       if (widget.pageLayoutMode == PdfPageLayoutMode.single) {
-        viewportRenderBox =
-            // ignore: avoid_as
-            (_singlePageViewKey.currentContext!.findRenderObject())!
-                as RenderBox;
+        viewportRenderBox = (_singlePageViewKey.currentContext!
+            .findRenderObject())! as RenderBox;
       } else {
-        viewportRenderBox =
-            // ignore: avoid_as
-            (_pdfScrollableStateKey.currentContext!.findRenderObject())!
-                as RenderBox;
+        viewportRenderBox = (_pdfScrollableStateKey.currentContext!
+            .findRenderObject())! as RenderBox;
       }
       final Offset position = viewportRenderBox.localToGlobal(Offset.zero);
       final Size containerSize = viewportRenderBox.size;
@@ -1960,10 +1322,8 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
       ],
     );
 
-    // call PdfViewerController methods after ScrollController attached.
     _isDocumentLoaded();
 
-    /// Find whether device is mobile or Laptop.
     _findDevice(context);
 
     final bool isPdfLoaded = _pdfViewerController.pageCount > 0 &&
@@ -1983,7 +1343,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
                   (_themeData!.colorScheme.brightness == Brightness.light
                       ? const Color(0xFFD6D6D6)
                       : const Color(0xFF303030)),
-              // ignore: always_specify_types
               child: FutureBuilder(
                   future: _getImages(),
                   builder:
@@ -1994,7 +1353,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
                       _textDirection = Directionality.of(context);
                       _viewportConstraints = context
                           .findRenderObject()!
-                          // ignore: invalid_use_of_protected_member, avoid_as
                           .constraints as BoxConstraints;
                       double totalHeight = 0.0;
                       _isKeyPadRaised =
@@ -2076,14 +1434,11 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
                           _pdfPagesKey[pageIndex] = GlobalKey();
                         }
                         _isOverflowed = _originalWidth![index] >
-                            // ignore: avoid_as
                             _viewportConstraints.maxWidth as bool;
                         if (kIsDesktop && !_isMobile) {
                           if (_originalWidth![index] > _maxPdfPageWidth !=
                               null) {
-                            _maxPdfPageWidth =
-                                // ignore: avoid_as
-                                _originalWidth![index] as double;
+                            _maxPdfPageWidth = _originalWidth![index] as double;
                           }
                         }
                         if (pdfImages[pageIndex] != null) {
@@ -2336,7 +1691,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
                           key: _pdfScrollableStateKey,
                           onDoubleTap: _handleDoubleTap,
                         );
-                        // Updates current offset when scrollDirection change occurs.
+
                         if (_isScrollDirectionChange) {
                           _pdfScrollableStateKey.currentState
                               ?.forcePixels(_scrollDirectionSwitchOffset);
@@ -2548,82 +1903,10 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Displays the built-in bookmark view.
-  ///
-  /// Using this method, the built-in bookmark view in the [SfPdfViewer] can be
-  /// displayed. The bookmark view can be closed either by tapping the close icon
-  /// or device's back button. ALso we can close the bookmark programmatically by
-  /// using Navigator.pop(context);
   void openBookmarkView() {
     _bookmarkKey.currentState?.open();
   }
 
-  /// Gets the selected text lines in the [SfPdfViewer].
-  ///
-  /// This example demonstrates how to highlight the selected text in the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-  ///   final PdfViewerController _pdfViewerController = PdfViewerController();
-  ///   final String _pdfPath = 'assets/sample.pdf';
-  ///   Uint8List ?_memoryBytes;
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return Scaffold(
-  ///       appBar: AppBar(
-  ///         title: Text('Syncfusion Flutter PDF Viewer'),
-  ///         actions: <Widget>[
-  ///           IconButton(
-  ///             icon: Icon(
-  ///               Icons.check_box_outline_blank_outlined,
-  ///               color: Colors.white,
-  ///             ),
-  ///             onPressed: () async {
-  ///               final ByteData data = await rootBundle.load(_pdfPath);
-  ///               final PdfDocument ?document = PdfDocument(
-  ///                   inputBytes: data.buffer
-  ///                       .asUint8List(data.offsetInBytes, data.lengthInBytes));
-  ///               if (document != null) {
-  ///                 _pdfViewerKey.currentState!.getSelectedTextLines().forEach((pdfTextline) {
-  ///                   final PdfPage _page = document.pages[pdfTextline.pageNumber];
-  ///                   final PdfRectangleAnnotation rectangleAnnotation =
-  ///                   PdfRectangleAnnotation(pdfTextline.bounds,
-  ///                   'Rectangle Annotation',
-  ///                   author: 'Syncfusion',
-  ///                   color: PdfColor.fromCMYK(0, 0, 255, 0),
-  ///                   innerColor: PdfColor.fromCMYK(0, 0, 255, 0),
-  ///                   opacity: 0.5,);
-  ///                   _page.annotations.add(rectangleAnnotation);
-  ///                    _page.annotations.flattenAllAnnotations();
-  ///                 });
-  ///                 final List<int> bytes = document.save();
-  ///                 _memoryBytes = Uint8List.fromList(bytes);
-  ///          }},),
-  ///           IconButton(
-  ///             icon: Icon(
-  ///               Icons.file_upload,
-  ///               color: Colors.white,
-  ///             ),
-  ///             onPressed: () {
-  ///               _pdfViewerController.clearSelection();
-  ///               Navigator.push(
-  ///                 context,
-  ///                 MaterialPageRoute(
-  ///                     builder: (context) => SafeArea(
-  ///                       child: SfPdfViewer.memory(
-  ///                        _memoryBytes!,
-  ///                       ),
-  ///               )),);},),],),
-  ///       body: SfPdfViewer.asset(
-  ///         _pdfPath,
-  ///         key: _pdfViewerKey,
-  ///         controller: _pdfViewerController,
-  ///      ),);
-  ///    }
-  /// }
-  /// ```
   List<PdfTextLine> getSelectedTextLines() {
     final List<PdfTextLine>? selectedTextLines =
         _pdfPagesKey[_pdfViewerController.pageNumber]
@@ -2661,7 +1944,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     return pageIndex;
   }
 
-  /// Get the rendered pages from plugin.
   Future<Map<int, List<dynamic>>?>? _getImages() {
     if (widget.pageLayoutMode == PdfPageLayoutMode.single) {
       Future<Map<int, List<dynamic>>?>? renderedPages;
@@ -2778,18 +2060,15 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  // Checks whether the current Widget is mounted and then relayout the Widget.
   void _checkMount() {
     if (super.mounted) {
       setState(() {});
     }
   }
 
-  /// Triggers the page changed callback when current page number is changed
   void _pageChanged() {
     if (_pdfViewerController.pageNumber != _previousPageNumber) {
       if (widget.onPageChanged != null) {
-        /// Triggering the page changed callback and pass the page changed details
         widget.onPageChanged!(PdfPageChangedDetails(
           _pdfViewerController.pageNumber,
           _previousPageNumber,
@@ -2817,8 +2096,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Whenever orientation is changed, PDF page is changed based on viewport
-  /// dimension so offset must be restored to avoid reading continuity loss.
   void _updateOffsetOnOrientationChange(
       Offset initialOffset, int pageIndex, double totalHeight) {
     if (_viewportWidth != _viewportConstraints.maxWidth &&
@@ -2850,7 +2127,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
           }
           _viewportWidth = _viewportConstraints.maxWidth;
 
-          /// Updates the orientation of device.
           _deviceOrientation = MediaQuery.of(context).orientation;
         }
       } else if (pageIndex == _pdfViewerController.pageCount) {
@@ -2884,7 +2160,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
         }
         _viewportWidth = _viewportConstraints.maxWidth;
 
-        /// Updates the orientation of device.
         _deviceOrientation = MediaQuery.of(context).orientation;
       }
     }
@@ -2954,8 +2229,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Whenever scroll direction is changed, PDF page is changed based on viewport
-  /// dimension so offset must be restored to avoid reading continuity loss.
   void _updateScrollDirectionChange(
       Offset initialOffset, int pageIndex, double totalHeight) {
     if (_scrollDirection != _tempScrollDirection ||
@@ -3047,7 +2320,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Calculates a size of PDF page image within the given constraints.
   Size _calculateSize(BoxConstraints constraints, double originalWidth,
       double originalHeight, double newWidth, double newHeight) {
     if (_viewportConstraints.maxWidth > newHeight &&
@@ -3069,8 +2341,7 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
         ).enforce(constraints);
       }
     }
-    // Maintained the aspect ratio while image is resized
-    // based on original page's width and height.
+
     Size newSize = constraints.constrainSizeAndAttemptToPreserveAspectRatio(
         Size(originalWidth, originalHeight));
     if ((widget.pageLayoutMode == PdfPageLayoutMode.single ||
@@ -3089,7 +2360,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     return newSize;
   }
 
-  /// Updates current page number when scrolling occurs.
   void _updateCurrentPageNumber({double currentOffset = 0}) {
     if (currentOffset > 0) {
       _pdfViewerController._pageNumber =
@@ -3104,21 +2374,18 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     _checkMount();
   }
 
-  /// Triggers when text selection dragging started.
   void _handleTextSelectionDragStarted() {
     setState(() {
       _panEnabled = false;
     });
   }
 
-  /// Triggers when text selection dragging ended.
   void _handleTextSelectionDragEnded() {
     setState(() {
       _panEnabled = true;
     });
   }
 
-  /// Jump to the desired page.
   void _jumpToPage(int pageNumber) {
     if (widget.pageLayoutMode == PdfPageLayoutMode.single) {
       if (_pageController.hasClients) {
@@ -3133,7 +2400,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Jump to the bookmark location.
   void _jumpToBookmark(PdfBookmark? bookmark) {
     if (bookmark != null && _document != null) {
       _clearSelection();
@@ -3209,7 +2475,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// clears the text selection.
   bool _clearSelection() {
     return _pdfPagesKey[_pdfViewerController.pageNumber]
             ?.currentState
@@ -3231,7 +2496,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     return pageIndex;
   }
 
-  /// Call the method according to property name.
   void _handleControllerValueChange({String? property}) {
     if (property == 'jumpToBookmark') {
       if (_pdfPages.isNotEmpty) {
@@ -3392,7 +2656,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Perform text search for mobile, windows and macOS platforms.
   Future<void> _performTextSearch() async {
     _pdfViewerController._pdfTextSearchResult._addListener(_handleTextSearch);
     setState(() {});
@@ -3438,11 +2701,10 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
         await Isolate.spawn(_findTextAsync, receivePort.sendPort);
   }
 
-  /// Text search is run in separate thread
   static Future<void> _findTextAsync(SendPort sendPort) async {
     final ReceivePort receivePort = ReceivePort();
     sendPort.send(receivePort.sendPort);
-    // ignore: always_specify_types
+
     final searchDetails = await receivePort.first;
     final SendPort replyPort = searchDetails[0];
     for (int i = 0; i < searchDetails[4].length; i++) {
@@ -3454,7 +2716,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     replyPort.send('SearchCompleted');
   }
 
-  /// Terminates the text search isolate.
   void _killTextSearchIsolate() {
     if (_textSearchIsolate != null) {
       _textSearchIsolate?.kill(priority: Isolate.immediate);
@@ -3592,7 +2853,6 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
     }
   }
 
-  /// Call the method according to property name.
   void _handleTextSearch({String? property}) {
     if (_pdfViewerController._pdfTextSearchResult.hasResult) {
       if (property == 'nextInstance') {
@@ -3666,168 +2926,47 @@ class SfPdfViewerState extends State<SfPdfViewer> with WidgetsBindingObserver {
   }
 }
 
-/// An object that is used to control the navigation and zooming operations
-/// in the [SfPdfViewer].
-///
-/// A [PdfViewerController] is served for several purposes. It can be used
-/// to change zoom level and navigate to the desired page, position and bookmark
-/// programmatically on [SfPdfViewer] by using the [zoomLevel] property and
-/// [jumpToPage], [jumpTo] and [jumpToBookmark] methods.
-///
-/// This example demonstrates how to use the [PdfViewerController] of
-/// [SfPdfViewer].
-///
-/// ```dart
-/// class MyAppState extends State<MyApp>{
-///  late PdfViewerController _pdfViewerController;
-///
-///  @override
-///  void initState(){
-///    _pdfViewerController = PdfViewerController();
-///    super.initState();
-///  }
-///
-///  @override
-///  Widget build(BuildContext context) {
-///    return MaterialApp(
-///      home: Scaffold(
-///        appBar: AppBar(
-///           title: Text('Syncfusion Flutter PdfViewer'),
-///           actions: <Widget>[
-///              IconButton(
-///                 icon: Icon(
-///                    Icons.zoom_in,
-///                     color: Colors.white,
-///                 ),
-///                 onPressed: () {
-///                    _pdfViewerController.zoomLevel = 2;
-///                 },
-///              ),
-///              IconButton(
-///                 icon: Icon(
-///                    Icons.arrow_drop_down_circle,
-///                     color: Colors.white,
-///                 ),
-///                 onPressed: () {
-///                    _pdfViewerController.jumpToPage(5);
-///                 },
-///              ),
-///           ],
-///        ),
-///        body: SfPdfViewer.asset(
-///          'assets/flutter-succinctly.pdf',
-///          controller: _pdfViewerController,
-///        ),
-///      ),
-///    );
-///  }
-///}
-/// ```
 class PdfViewerController extends ChangeNotifier with _ValueChangeNotifier {
-  /// Zoom level
   double _zoomLevel = 1;
 
-  /// Current page number
   int _currentPageNumber = 0;
 
-  /// Total number of pages in Pdf.
   int _totalPages = 0;
 
-  /// Searched text value
   String _searchText = '';
 
-  /// option for text search
   TextSearchOption? _textSearchOption;
 
-  /// Sets the current page number.
   set _pageNumber(int num) {
     _currentPageNumber = num;
     notifyListeners();
   }
 
-  /// Sets the page count.
   set _pageCount(int pageCount) {
     _totalPages = pageCount;
     _notifyPropertyChangedListeners(property: 'pageCount');
   }
 
-  /// PdfBookmark instance
   PdfBookmark? _pdfBookmark;
 
-  /// PdfTextSearchResult instance
   final PdfTextSearchResult _pdfTextSearchResult = PdfTextSearchResult();
 
-  /// Vertical Offset
   double _verticalOffset = 0.0;
 
-  /// Horizontal Offset
   double _horizontalOffset = 0.0;
 
-  /// Represents different page navigation option
   Pagination? _pageNavigator;
 
-  /// Returns `true`, if the text selection is cleared properly.
   bool _clearTextSelection = false;
 
-  /// Scroll X Position
   double _scrollPositionX = 0.0;
 
-  /// Scroll Y Position
   double _scrollPositionY = 0.0;
 
-  /// The current scroll offset of the SfPdfViewer widget.
   Offset get scrollOffset => Offset(_scrollPositionX, _scrollPositionY);
 
-  /// Zoom level of a document in the [SfPdfViewer].
-  ///
-  /// Zoom level value can be set between 1.0 to 3.0. The maximum allowed zoom
-  /// level is 3.0 and if any value is set beyond that, then it will be
-  /// restricted to 3.0.
-  ///
-  /// Defaults to 1.0
-  ///
-  /// This example demonstrates how to set the zoom level in the [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///  late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.zoom_in,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.zoomLevel = 2;
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   double get zoomLevel => _zoomLevel;
 
-  /// Sets the zoom level
   set zoomLevel(double newValue) {
     if (_zoomLevel == newValue) {
       return;
@@ -3836,687 +2975,50 @@ class PdfViewerController extends ChangeNotifier with _ValueChangeNotifier {
     _notifyPropertyChangedListeners(property: 'zoomLevel');
   }
 
-  /// Current page number displayed in the [SfPdfViewer].
-  ///
-  /// Defaults to null
-  ///
-  /// This example demonstrates how to get the current page's number and total
-  /// page count.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///  late PdfViewerController _pdfViewerController;
-  ///  int _pageNumber=0;
-  ///  int _pageCount=0;
-  ///
-  ///  @override
-  ///  initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              Container(
-  ///                 width: 100,
-  ///                 height: 50,
-  ///                 child: TextField(
-  ///                    decoration: InputDecoration(labelText: '$_pageNumber / $_pageCount'),
-  ///                 )
-  ///              ),
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.keyboard_arrow_up,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.previousPage();
-  ///                    setState(() {
-  ///                      _pageNumber = _pdfViewerController.pageNumber;
-  ///                    });
-  ///                 },
-  ///              ),
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.keyboard_arrow_down,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.nextPage();
-  ///                    setState(() {
-  ///                      _pageNumber = _pdfViewerController.pageNumber;
-  ///                    });
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          onDocumentLoaded: (PdfDocumentLoadedDetails details){
-  ///            setState(() {
-  ///              _pageNumber = _pdfViewerController.pageNumber;
-  ///              _pageCount = _pdfViewerController.pageCount;
-  ///            });
-  ///          }
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   int get pageNumber {
     return _currentPageNumber;
   }
 
-  /// Total page count of the document loaded in the [SfPdfViewer].
-  ///
-  /// Defaults to null
-  ///
-  /// This example demonstrates how to get the current page's number and total page count.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///  late PdfViewerController _pdfViewerController;
-  ///  int _pageNumber=0;
-  ///  int _pageCount=0;
-  ///
-  ///  @override
-  ///  initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              Container(
-  ///                 width: 100,
-  ///                 height: 50,
-  ///                 child: TextField(
-  ///                    decoration: InputDecoration(labelText: '$_pageNumber / $_pageCount'),
-  ///                 )
-  ///              ),
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.keyboard_arrow_up,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.previousPage();
-  ///                    setState(() {
-  ///                      _pageNumber = _pdfViewerController.pageNumber;
-  ///                    });
-  ///                 },
-  ///              ),
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.keyboard_arrow_down,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.nextPage();
-  ///                    setState(() {
-  ///                      _pageNumber = _pdfViewerController.pageNumber;
-  ///                    });
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          onDocumentLoaded: (PdfDocumentLoadedDetails details){
-  ///            setState(() {
-  ///              _pageNumber = _pdfViewerController.pageNumber;
-  ///              _pageCount = _pdfViewerController.pageCount;
-  ///            });
-  ///          }
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   int get pageCount {
     return _totalPages;
   }
 
-  /// Navigates to the specified bookmark location in a PDF document.
-  ///
-  /// Using this method, the [SfPdfViewer] navigates to the
-  /// specified [PdfBookmark] location in a PDF document. If the specified bookmark
-  /// location is wrong, then the navigation will not happen and the older page location
-  /// will be retained.
-  ///
-  /// * bookmark - _required_ - The bookmark location to which the [SfPdfViewer]
-  /// should navigate to.
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to navigate to the specified bookmark location.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  /// late PdfViewerController _pdfViewerController;
-  /// late PdfBookmark _pdfBookmark;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.arrow_drop_down_circle,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.jumpToBookmark(_pdfBookmark);
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///          onDocumentLoaded: (PdfDocumentLoadedDetails details){
-  ///             _pdfBookmark = details.document.bookmarks[0];
-  ///          },
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void jumpToBookmark(PdfBookmark bookmark) {
     _pdfBookmark = bookmark;
     _notifyPropertyChangedListeners(property: 'jumpToBookmark');
   }
 
-  /// Jumps the scroll position of [SfPdfViewer] to the specified offset value.
-  ///
-  /// Using this method, the [SfPdfViewer] can be scrolled or moved to the
-  /// specified horizontal and vertical offset. If the specified offset value is wrong,
-  /// then the scroll will not happen and the older position will be retained.
-  ///
-  /// * xOffset - _optional_ - The value to which the [SfPdfViewer] scrolls horizontally.
-  /// * yOffset - _optional_ - The value to which the [SfPdfViewer] scrolls vertically.
-  ///
-  /// _Note:_ If the offset values are not provided, then the the [SfPdfViewer] will be
-  /// scrolled or moved to the default position (0, 0).
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to jump or move the scroll position to the specified
-  /// offset value.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///  late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.arrow_drop_down_circle,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.jumpTo(yOffset:1500);
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void jumpTo({double xOffset = 0.0, double yOffset = 0.0}) {
     _horizontalOffset = xOffset;
     _verticalOffset = yOffset;
     _notifyPropertyChangedListeners(property: 'jumpTo');
   }
 
-  /// Navigates to the specified page number in a PDF document.
-  ///
-  /// Using this method, the [SfPdfViewer] navigates to the
-  /// specified page number in a PDF document. If the specified page number is wrong,
-  /// then the navigation will not happen and the older page will be retained.
-  ///
-  /// * pageNumber - _required_ - The destination page number to which the
-  /// [SfPdfViewer] should navigate to.
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to navigate to the specified page number.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///  late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.arrow_drop_down_circle,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.jumpToPage(5);
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void jumpToPage(int pageNumber) {
     _pageNavigator = Pagination(Navigation.jumpToPage, index: pageNumber);
     _notifyPropertyChangedListeners(property: 'pageNavigate');
   }
 
-  /// Navigates to the previous page of a PDF document.
-  ///
-  /// Using this method, the [SfPdfViewer] navigates to the
-  /// previous page of a PDF document. If the previous page doesn't exists, then the
-  /// navigation will not happen and the older page will be retained.
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to navigate to the next and previous page.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///  late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.keyboard_arrow_up,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.previousPage();
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void previousPage() {
     _pageNavigator = Pagination(Navigation.previousPage);
     _notifyPropertyChangedListeners(property: 'pageNavigate');
   }
 
-  /// Navigates to the next page of a PDF document.
-  ///
-  /// Using this method, the [SfPdfViewer] navigates to the
-  /// next page of a PDF document. If the next page doesn't exists, then the
-  /// navigation will not happen and the older page will be retained.
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to navigate to the next and previous page.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.keyboard_arrow_down,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.nextPage();
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void nextPage() {
     _pageNavigator = Pagination(Navigation.nextPage);
     _notifyPropertyChangedListeners(property: 'pageNavigate');
   }
 
-  /// Navigates to the first page of a PDF document.
-  ///
-  /// Using this method, the [SfPdfViewer] navigates to the
-  /// first page of a PDF document. If the current page displayed is already the
-  /// first page, then nothing happens.
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to navigate to the first and last page.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  /// late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.first_page,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.firstPage();
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void firstPage() {
     _pageNavigator = Pagination(Navigation.firstPage);
     _notifyPropertyChangedListeners(property: 'pageNavigate');
   }
 
-  /// Navigates to the last page of a PDF document.
-  ///
-  /// Using this method, the [SfPdfViewer] navigates to the
-  /// last page of a PDF document. If the current page displayed is already the
-  /// last page, then nothing happens.
-  ///
-  /// Returns null.
-  ///
-  /// This example demonstrates how to navigate to the first and last page.
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp>{
-  ///
-  ///  late PdfViewerController _pdfViewerController;
-  ///
-  ///  @override
-  ///  void initState(){
-  ///    _pdfViewerController = PdfViewerController();
-  ///    super.initState();
-  ///  }
-  ///
-  ///  @override
-  ///  Widget build(BuildContext context) {
-  ///    return MaterialApp(
-  ///      home: Scaffold(
-  ///        appBar: AppBar(
-  ///           title: Text('Syncfusion Flutter PdfViewer'),
-  ///           actions: <Widget>[
-  ///              IconButton(
-  ///                 icon: Icon(
-  ///                    Icons.last_page,
-  ///                    color: Colors.white,
-  ///                 ),
-  ///                 onPressed: () {
-  ///                    _pdfViewerController.lastPage();
-  ///                 },
-  ///              ),
-  ///           ],
-  ///        ),
-  ///        body: SfPdfViewer.asset(
-  ///          'assets/flutter-succinctly.pdf',
-  ///          controller: _pdfViewerController,
-  ///        ),
-  ///      ),
-  ///    );
-  ///  }
-  ///}
-  /// ```
   void lastPage() {
     _pageNavigator = Pagination(Navigation.lastPage);
     _notifyPropertyChangedListeners(property: 'pageNavigate');
   }
 
-  /// Searches the given text in the document.
-  ///
-  /// On mobile and desktop platforms, the search will be performed asynchronously
-  /// and so the results will be returned periodically on a page-by-page basis,
-  /// which can be retrieved using the [addListener] method in the application.
-  ///
-  /// Whereas in the web platform, the search will be performed synchronously
-  /// and so the result will be returned only after completing the search on all the pages.
-  /// This is since [isolate] is not supported for the web platform yet.
-  ///
-  /// This method returns the [PdfTextSearchResult] object using which the search navigation can be performed on the instances found.
-  ///
-  ///  * searchText - required - The text to be searched in the document.
-  ///  * searchOption - optional - Defines the constants that specify the option for text search.
-  ///
-  /// This example demonstrates how to search text in [SfPdfViewer].
-  ///
-  /// ```dart
-  /// class MyAppState extends State<MyApp> {
-  ///
-  ///   late PdfViewerController _pdfViewerController;
-  ///   late PdfTextSearchResult _searchResult;
-  ///
-  ///   @override
-  ///   void initState() {
-  ///     _pdfViewerController = PdfViewerController();
-  ///     _searchResult = PdfTextSearchResult();
-  ///     super.initState();
-  ///   }
-  ///
-  ///   void _showDialog(BuildContext context) {
-  ///     showDialog(
-  ///       context: context,
-  ///       builder: (BuildContext context) {
-  ///         return AlertDialog(
-  ///           title: const Text('Search Result'),
-  ///           content: const Text(
-  ///               'No more occurrences found. Would you like to continue to search from the beginning?'),
-  ///           actions: <Widget>[
-  ///             TextButton(
-  ///               onPressed: () {
-  ///                 _searchResult.nextInstance();
-  ///                 Navigator.of(context).pop();
-  ///               },
-  ///               child: const Text('YES'),
-  ///             ),
-  ///             TextButton(
-  ///               onPressed: () {
-  ///                 _searchResult.clear();
-  ///                 Navigator.of(context).pop();
-  ///               },
-  ///               child: const Text('NO'),
-  ///             ),
-  ///           ],
-  ///         );
-  ///       },
-  ///     );
-  ///   }
-  ///
-  ///   @override
-  ///   Widget build(BuildContext context) {
-  ///     return MaterialApp(
-  ///         home: Scaffold(
-  ///             appBar: AppBar(
-  ///               title: const Text('Syncfusion Flutter PdfViewer'),
-  ///               actions: <Widget>[
-  ///                 IconButton(
-  ///                     icon: const Icon(
-  ///                       Icons.search,
-  ///                       color: Colors.white,
-  ///                     ),
-  ///                     onPressed: () {
-  ///                       _searchResult = _pdfViewerController.searchText('the',
-  ///                           searchOption: TextSearchOption.caseSensitive);
-  ///                      if (kIsWeb) {
-  ///                         setState(() {});
-  ///                       } else {
-  ///                         _searchResult.addListener(() {
-  ///                           if (_searchResult.hasResult) {
-  ///                            setState(() {});
-  ///                           }
-  ///                         });
-  ///                       }
-  ///                     }),
-  ///                 Visibility(
-  ///                   visible: _searchResult.hasResult,
-  ///                   child: IconButton(
-  ///                     icon: const Icon(
-  ///                       Icons.clear,
-  ///                       color: Colors.white,
-  ///                     ),
-  ///                     onPressed: () {
-  ///                       setState(() {
-  ///                         _searchResult.clear();
-  ///                       });
-  ///                     },
-  ///                   ),
-  ///                 ),
-  ///                 Visibility(
-  ///                   visible: _searchResult.hasResult,
-  ///                   child: IconButton(
-  ///                     icon: const Icon(
-  ///                       Icons.navigate_before,
-  ///                       color: Colors.white,
-  ///                     ),
-  ///                     onPressed: () {
-  ///                       _searchResult.previousInstance();
-  ///                     },
-  ///                   ),
-  ///                 ),
-  ///                 Visibility(
-  ///                   visible: _searchResult.hasResult,
-  ///                   child: IconButton(
-  ///                    icon: const Icon(
-  ///                       Icons.navigate_next,
-  ///                      color: Colors.white,
-  ///                     ),
-  ///                    onPressed: () {
-  ///                       if ((_searchResult.currentInstanceIndex ==
-  ///                                   _searchResult.totalInstanceCount &&
-  ///                               kIsWeb) ||
-  ///                           (_searchResult.currentInstanceIndex ==
-  ///                                   _searchResult.totalInstanceCount &&
-  ///                               _searchResult.isSearchCompleted)) {
-  ///                         _showDialog(context);
-  ///                       } else {
-  ///                         _searchResult.nextInstance();
-  ///                       }
-  ///                     },
-  ///                   ),
-  ///                 ),
-  ///               ],
-  ///             ),
-  ///             body: SfPdfViewer.network(
-  ///               'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
-  ///               controller: _pdfViewerController,
-  ///               currentSearchTextHighlightColor: Colors.blue,
-  ///               otherSearchTextHighlightColor: Colors.yellow,
-  ///             )));
-  ///   }
-  /// }
-  ///'''
   PdfTextSearchResult searchText(String searchText,
       {TextSearchOption? searchOption}) {
     _searchText = searchText;
@@ -4525,15 +3027,11 @@ class PdfViewerController extends ChangeNotifier with _ValueChangeNotifier {
     return _pdfTextSearchResult;
   }
 
-  /// Clears the text selection in [SfPdfViewer].
-  ///
-  /// Returns `true`, if the text selection is cleared properly.
   bool clearSelection() {
     _notifyPropertyChangedListeners(property: 'clearTextSelection');
     return _clearTextSelection;
   }
 
-  /// Resets the controller value when widget is updated.
   void _reset() {
     _zoomLevel = 1.0;
     _currentPageNumber = 0;
@@ -4547,93 +3045,64 @@ class PdfViewerController extends ChangeNotifier with _ValueChangeNotifier {
   }
 }
 
-/// PdfTextSearchResult holds the details of TextSearch
 class PdfTextSearchResult extends ChangeNotifier with _ValueChangeNotifier {
-  /// Current instance number of the searched text.
   int _currentInstanceIndex = 0;
 
-  /// Total search text instances found in the PDF document.
   int _totalInstanceCount = 0;
 
-  /// Indicates whether the text search context is alive for searching
   bool _hasResult = false;
 
-  /// Indicates whether the text search is completed or not .
   bool _isSearchCompleted = false;
 
-  /// Sets the current highlighted search text index in the document.
   set _currentOccurrenceIndex(int num) {
     _currentInstanceIndex = num;
     notifyListeners();
   }
 
-  /// The current highlighted search text index in the document.
   int get currentInstanceIndex {
     return _currentInstanceIndex;
   }
 
-  /// Sets the total instance of the searched text in the PDF document.
   set _totalSearchTextCount(int totalInstanceCount) {
     _totalInstanceCount = totalInstanceCount;
     notifyListeners();
   }
 
-  /// Indicates the total instance of the searched text in the PDF document.
   int get totalInstanceCount {
     return _totalInstanceCount;
   }
 
-  /// Updates whether the text search context is alive for searching
   void _updateResult(bool hasResult) {
     _hasResult = hasResult;
     notifyListeners();
   }
 
-  /// Indicates whether the text search context is alive for searching
   bool get hasResult {
     return _hasResult;
   }
 
-  /// Updates whether the text search is completed or not.
   void _updateSearchCompletedStatus(bool isSearchCompleted) {
     _isSearchCompleted = isSearchCompleted;
     notifyListeners();
   }
 
-  /// Indicates whether the text search is completed or not.
   bool get isSearchCompleted {
     return _isSearchCompleted;
   }
 
-  /// Moves to the next searched text instance in the document.
-  ///
-  /// Using this method, the [SfPdfViewer] will move to the next searched text instance
-  /// in the document. If this method is called after reaching the last instance,
-  /// then the first instance will be again highlighted and the process continues.
   void nextInstance() {
     _notifyPropertyChangedListeners(property: 'nextInstance');
   }
 
-  /// Moves to the previous searched text instance in the document.
-  ///
-  /// Using this method, the [SfPdfViewer] will move to the previous searched text
-  /// instance in the document. If this method is called from the first instance,
-  /// then the last (previous) instance will be highlighted and the process continues.
   void previousInstance() {
     _notifyPropertyChangedListeners(property: 'previousInstance');
   }
 
-  /// Clears the [PdfTextSearchResult] object and cancels the search process.
-  ///
-  /// Once this method is called, the search process will be cancelled in the UI and
-  /// the [PdfTextSearchResult] object will be cleared, which in turn changes the
-  /// [hasResult] property value to 'false`.
   void clear() {
     _notifyPropertyChangedListeners(property: 'clear');
   }
 }
 
-/// _ValueChangeNotifier class listener invoked whenever PdfViewerController property changed.
 class _ValueChangeNotifier {
   late _PdfControllerListener _listener;
   final ObserverList<_PdfControllerListener> _listeners =

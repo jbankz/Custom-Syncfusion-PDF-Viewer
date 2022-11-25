@@ -43,6 +43,13 @@ class _HomePage extends State<HomePage> {
       body: SfPdfViewer.network(
         'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
         key: _pdfViewerKey,
+        sfPdfViewerThemeData:
+            SfPdfViewerThemeData(backgroundColor: Colors.transparent),
+        themeData: ThemeData(),
+        showContents: false,
+        customBookmarkBuilder: (bookmarkView) {
+          return const Text('Jay');
+        },
       ),
     );
   }
